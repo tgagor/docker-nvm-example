@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+# call nvm with all the parameters
+nvm $@
