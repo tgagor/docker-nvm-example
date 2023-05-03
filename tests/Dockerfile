@@ -1,4 +1,4 @@
-FROM base-nvm
+FROM tgagor/base/nvm
 
 RUN nvm version
 
@@ -10,8 +10,12 @@ RUN nvm install --lts && \
 
 # install something old
 RUN nvm install v16 && \
+    nvm alias default v16 && \
     nvm which node && \
     ls -lah $(nvm which node) && \
     $(nvm which node) --version && \
     nvm list default | grep v16 && \
     node --version
+
+# install something with npm
+RUN npm install -g yarn
