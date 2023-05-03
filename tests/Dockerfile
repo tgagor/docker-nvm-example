@@ -1,4 +1,4 @@
-FROM base-nvm
+FROM tgagor/base/nvm
 
 RUN nvm version
 
