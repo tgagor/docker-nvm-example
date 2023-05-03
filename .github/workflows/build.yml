@@ -1,0 +1,41 @@
+name: build
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+    branches:
+      - master
+      - 'feature/*'
+      - 'bugfix/*'
+    tags:
+      - '*.*.*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build, squash and push
+        run: |
+          # build base-nvm
+          docker build \
+            --tag tgagor/base/nvm base-nvm
+
+          # tests
+          docker build \
+            --tag tgagor/base/nvm-tests tests
+
+          # build node v16
+          docker build \
+            --build-arg NODE_VERSION=16 \
+            --tag tgagor/base/node:16 node
+
+          # build node v18
+          docker build \
+            --build-arg NODE_VERSION=18 \
+            --tag tgagor/base/node:18 node
