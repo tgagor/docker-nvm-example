@@ -30,6 +30,8 @@ jobs:
           docker build \
             --tag tgagor/v2/base/nvm v2/base-nvm
 
+          docker image ls
+
       - name: Build node:18
         run: |
           # build node v18 on base v1
@@ -47,6 +49,8 @@ jobs:
             --build-arg NODE_VERSION=1 \
             --build-arg BASE_IMAGE=tgagor/v2/base/nvm \
             --tag tgagor/base/node:18-v2 base-node
+
+          docker image ls
 
       - name: Test it
         run: |
