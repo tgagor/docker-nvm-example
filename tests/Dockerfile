@@ -10,6 +10,7 @@ RUN nvm install --lts && \
 
 # install something old
 RUN nvm install v16 && \
+    nvm alias default v16 && \
     nvm which node && \
     ls -lah $(nvm which node) && \
     $(nvm which node) --version && \
