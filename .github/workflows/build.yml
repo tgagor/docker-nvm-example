@@ -38,28 +38,30 @@ jobs:
 
           # build node v18 on base v1
           docker build \
-            --build-arg NODE_VERSION=18 \
+            --build-arg NODE_VERSION=v18 \
             --build-arg BASE_IMAGE=tgagor/v1/base/nvm \
-            --tag tgagor/base/node:18-v1 base-node
+            --tag tgagor/v1/base/node:18 base-node
+
           # build node v18 on base v1-alpine
           # docker build \
           #   --build-arg NODE_VERSION=18 \
           #   --build-arg BASE_IMAGE=tgagor/v1/base/nvm:alpine \
-          #   --tag tgagor/base/node:18-v1-alpine base-node
+          #   --tag tgagor/v1/base/node:18-alpine base-node
+
           # build node v18 on base v2
           docker build \
             --build-arg NODE_VERSION=1 \
             --build-arg BASE_IMAGE=tgagor/v2/base/nvm \
-            --tag tgagor/base/node:18-v2 base-node
+            --tag tgagor/v2/base/node:18 base-node
 
           docker image ls
 
       - name: Test it
         run: |
           set -x
-          docker run -i tgagor/base/node:18-v1        node --version || echo "Failed."
-          docker run -i tgagor/base/node:18-v1-alpine node --version || echo "Failed."
-          docker run -i tgagor/base/node:18-v2        node --version || echo "Failed."
+          docker run -i tgagor/v1/base/node:18        node --version || echo "Failed."
+          # docker run -i tgagor/v1/base/node:18-alpine node --version || echo "Failed."
+          docker run -i tgagor/v2/base/node:18        node --version || echo "Failed."
 
           # docker build \
           #   --tag tgagor/base/nvm-tests tests
