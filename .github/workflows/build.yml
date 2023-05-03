@@ -39,7 +39,9 @@ jobs:
             --tag tgagor/base/node:18 node
       - name: Test it
         run: |
-          docker run -i tgagor/node:16 node --version
+          set -x
+          docker run -i tgagor/base/node:16 node --version
+          docker run -i tgagor/base/node:18 node --version
 
           docker build \
             --tag tgagor/base/nvm-tests tests
