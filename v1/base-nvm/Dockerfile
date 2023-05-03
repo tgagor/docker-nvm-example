@@ -11,7 +11,7 @@ RUN apt-get update && \
 FROM ubuntu:22.04
 
 # we don't want to store cached files in the image
-VOLUME /var/cache/apt
+VOLUME /var/cache/apt ~/.npm
 
 # prerequsities
 RUN apt-get update && \
@@ -24,7 +24,6 @@ ENV NVM_DIR=/opt/nvm
 
 # copy the nvm
 COPY --from=fetcher nvm $NVM_DIR
-# COPY .local/bin ~/.local/bin
 
 # change ownership if needed
 RUN chown -R $(id -un):$(id -gn) $NVM_DIR && \

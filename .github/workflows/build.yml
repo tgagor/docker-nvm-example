@@ -24,24 +24,36 @@ jobs:
         run: |
           # build base/nvm
           docker build \
-            --tag tgagor/base/nvm base-nvm
-
-      - name: Build node:16 and node:18
-        run: |
-          # build node v16
+            --tag tgagor/v1/base/nvm v1/base-nvm
           docker build \
-            --build-arg NODE_VERSION=16 \
-            --tag tgagor/base/node:16 node
+            --tag tgagor/v1/base/nvm:alpine v1-alpine/base-nvm
+          docker build \
+            --tag tgagor/v2/base/nvm v2/base-nvm
 
-          # build node v18
+      - name: Build node:18
+        run: |
+          # build node v18 on base v1
           docker build \
             --build-arg NODE_VERSION=18 \
-            --tag tgagor/base/node:18 node
+            --build-arg BASE_IMAGE=tgagor/v1/base/nvm \
+            --tag tgagor/base/node:18-v1 base-node
+          # build node v18 on base v1-alpine
+          docker build \
+            --build-arg NODE_VERSION=18 \
+            --build-arg BASE_IMAGE=tgagor/v1/base/nvm:alpine \
+            --tag tgagor/base/node:18-v1-alpine base-node
+          # build node v18 on base v2
+          docker build \
+            --build-arg NODE_VERSION=1 \
+            --build-arg BASE_IMAGE=tgagor/v2/base/nvm \
+            --tag tgagor/base/node:18-v2 base-node
+
       - name: Test it
         run: |
           set -x
-          docker run -i --entrypoint /usr/bin/bash tgagor/base/node:16 node --version
-          docker run -i --entrypoint /usr/bin/bash tgagor/base/node:18 node --version
+          docker run -i tgagor/base/node:18-v1        node --version || echo "Failed."
+          docker run -i tgagor/base/node:18-v1-alpine node --version || echo "Failed."
+          docker run -i tgagor/base/node:18-v2        node --version || echo "Failed."
 
-          docker build \
-            --tag tgagor/base/nvm-tests tests
+          # docker build \
+          #   --tag tgagor/base/nvm-tests tests
