@@ -22,10 +22,12 @@ jobs:
 
       - name: Build nvm-base, test it, create some node images
         run: |
-          # build base-nvm
+          # build base/nvm
           docker build \
             --tag tgagor/base/nvm base-nvm
 
+      - name: Build node:16 and node:18
+        run: |
           # build node v16
           docker build \
             --build-arg NODE_VERSION=16 \
@@ -35,7 +37,9 @@ jobs:
           docker build \
             --build-arg NODE_VERSION=18 \
             --tag tgagor/base/node:18 node
+      - name: Test it
+        run: |
+          docker run -i tgagor/node:16 node --version
 
-          # # tests
-          # docker build \
-          #   --tag tgagor/base/nvm-tests tests
+          docker build \
+            --tag tgagor/base/nvm-tests tests

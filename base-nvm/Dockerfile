@@ -24,7 +24,7 @@ ENV NVM_DIR=/opt/nvm
 
 # copy the nvm
 COPY --from=fetcher nvm $NVM_DIR
-COPY .local/bin ~/.local/bin
+# COPY .local/bin ~/.local/bin
 
 # change ownership if needed
 RUN chown -R $(id -un):$(id -gn) $NVM_DIR && \
