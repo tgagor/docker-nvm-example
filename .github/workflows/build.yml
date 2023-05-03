@@ -22,26 +22,18 @@ jobs:
 
       - name: Build nvm-base
         run: |
-          # build base/nvm
-          docker build \
-            --tag tgagor/base/nvm base-nvm
+          make build-base
+          make list
 
-      - name: Build node:16 and node:18
+      - name: Build node:18
         run: |
-          # build node v16
-          docker build \
-            --build-arg NODE_VERSION=16 \
-            --tag tgagor/base/node:16 node
+          make build-node
+          make list
 
-          # build node v18
-          docker build \
-            --build-arg NODE_VERSION=18 \
-            --tag tgagor/base/node:18 node
-      - name: Test it
+      - name: Test v1
         run: |
-          set -x
-          docker run -i --entrypoint /usr/bin/bash tgagor/base/node:16 node --version
-          docker run -i --entrypoint /usr/bin/bash tgagor/base/node:18 node --version
+          make test-v1
 
-          docker build \
-            --tag tgagor/base/nvm-tests tests
+      - name: Test v2
+        run: |
+          make test-v2

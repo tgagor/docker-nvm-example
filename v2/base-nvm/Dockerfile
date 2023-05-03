@@ -18,14 +18,21 @@ RUN apt-get update && \
     apt-get install -y \
         curl
 
-SHELL ["/usr/bin/bash", "--login", "-c"]
-
 ENV NVM_DIR=/opt/nvm
 
-# copy the nvm
-COPY --from=fetcher nvm $NVM_DIR
-# COPY .local/bin ~/.local/bin
+# add unprivileged user
+RUN useradd -m -r -s /usr/sbin/nologin jenkins
+USER jenkins
 
-# change ownership if needed
-RUN chown -R $(id -un):$(id -gn) $NVM_DIR && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use' >> ~/.profile
+# prepare place for binaries symlinks
+RUN mkdir -p /home/jenkins/bin && \
+    chown -R jenkins:jenkins /home/jenkins/bin
+ENV PATH="$PATH:/home/jenkins/bin"
+
+# don't store npm cache in the image
+VOLUME ~/.npm
+
+# copy the nvm
+COPY --from=fetcher --chown=jenkins:jenkins nvm $NVM_DIR
+# copy wrapper scripts
+COPY bin /usr/local/bin
