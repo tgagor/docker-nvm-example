@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build, squash and push
+      - name: Build nvm-base, test it, create some node images
         run: |
           # build base-nvm
           docker build \
