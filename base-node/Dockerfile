@@ -1,7 +1,5 @@
-ARG BASE_IMAGE
-ARG NODE_VERSION
+ARG BASE_IMAGE=tgagor/v1/base/nvm
 FROM $BASE_IMAGE
 
-RUN echo $BASE_IMAGE && \
-    echo $NODE_VERSION && \
-    nvm install --latest-npm $NODE_VERSION
+ARG NODE_VERSION="lts/*"
+RUN nvm install $NODE_VERSION --latest-npm
