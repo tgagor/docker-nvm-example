@@ -10,7 +10,7 @@ RUN apk add git && \
 FROM alpine:3
 
 # we don't want to store cached files in the image
-VOLUME ~/.npm
+VOLUME /var/cache/apk
 
 # prerequsities
 RUN apk add --no-cache \
@@ -18,13 +18,18 @@ RUN apk add --no-cache \
     coreutils \
     curl
 
+ENV NVM_DIR=/opt/nvm
 SHELL ["/bin/bash", "--login", "-c"]
 
-ENV NVM_DIR=/opt/nvm
+# add unprivileged user
+RUN adduser -D -S jenkins
+USER jenkins
+
+# don't store npm cache in the image
+VOLUME ~/.npm
 
 # copy the nvm
-COPY --from=fetcher nvm $NVM_DIR
+COPY --from=fetcher --chown=jenkins:jenkins nvm $NVM_DIR
 
-# change ownership if needed
-RUN chown -R $(id -un):$(id -gn) $NVM_DIR && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use' >> ~/.profile
+# install NVM
+RUN echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use' >> ~/.profile

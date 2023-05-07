@@ -11,21 +11,23 @@ RUN apt-get update && \
 FROM ubuntu:22.04
 
 # we don't want to store cached files in the image
-VOLUME /var/cache/apt ~/.npm
+VOLUME /var/cache/apt
 
 # prerequsities
 RUN apt-get update && \
     apt-get install -y \
         curl
 
-SHELL ["/usr/bin/bash", "--login", "-c"]
-
 ENV NVM_DIR=/opt/nvm
 
-# copy the nvm
-COPY --from=fetcher nvm $NVM_DIR
-COPY bin /usr/local/bin
+# add unprivileged user
+RUN useradd -m -r -s /usr/sbin/nologin jenkins
+USER jenkins
 
-# change ownership if needed
-RUN chown -R $(id -un):$(id -gn) $NVM_DIR && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use' >> ~/.profile
+# don't store npm cache in the image
+VOLUME ~/.npm
+
+# copy the nvm
+COPY --from=fetcher --chown=jenkins:jenkins nvm $NVM_DIR
+# copy wrapper scripts
+COPY bin /usr/local/bin

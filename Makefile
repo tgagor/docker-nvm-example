@@ -26,7 +26,7 @@ build-node:
 
 	# build node v18 on base v2
 	docker build \
-		--build-arg NODE_VERSION=1 \
+		--build-arg NODE_VERSION=18 \
 		--build-arg BASE_IMAGE=tgagor/v2/base/nvm \
 		--tag tgagor/v2/base/node:18 base-node
 
