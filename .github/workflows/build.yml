@@ -22,46 +22,14 @@ jobs:
 
       - name: Build nvm-base
         run: |
-          # build base/nvm
-          docker build \
-            --tag tgagor/v1/base/nvm v1/base-nvm
-          docker build \
-            --tag tgagor/v1/base/nvm:alpine v1-alpine/base-nvm
-          docker build \
-            --tag tgagor/v2/base/nvm v2/base-nvm
-
-          docker image ls
+          make build-base
+          make list
 
       - name: Build node:18
         run: |
-          set -x
-
-          # build node v18 on base v1
-          docker build \
-            --build-arg NODE_VERSION=v18 \
-            --build-arg BASE_IMAGE=tgagor/v1/base/nvm \
-            --tag tgagor/v1/base/node:18 base-node
-
-          # build node v18 on base v1-alpine
-          # docker build \
-          #   --build-arg NODE_VERSION=18 \
-          #   --build-arg BASE_IMAGE=tgagor/v1/base/nvm:alpine \
-          #   --tag tgagor/v1/base/node:18-alpine base-node
-
-          # build node v18 on base v2
-          docker build \
-            --build-arg NODE_VERSION=1 \
-            --build-arg BASE_IMAGE=tgagor/v2/base/nvm \
-            --tag tgagor/v2/base/node:18 base-node
-
-          docker image ls
+          make build-node
+          make list
 
       - name: Test it
         run: |
-          set -x
-          docker run -i tgagor/v1/base/node:18        node --version || echo "Failed."
-          # docker run -i tgagor/v1/base/node:18-alpine node --version || echo "Failed."
-          docker run -i tgagor/v2/base/node:18        node --version || echo "Failed."
-
-          # docker build \
-          #   --tag tgagor/base/nvm-tests tests
+          make test
