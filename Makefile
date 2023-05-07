@@ -40,14 +40,17 @@ test:
 	set -x
 
 	# testing v1
-	docker run -i tgagor/v1/base/node:18 		node --version || echo "Failed."
-	docker run -i tgagor/v1/base/node:18-alpine node --version || echo "Failed."
+	docker run -i tgagor/v1/base/node:18 \
+		node --version || echo "Failed."
+	docker run -i tgagor/v1/base/node:18-alpine \
+		node --version || echo "Failed."
 
 	# testing v2
-	docker run -i tgagor/v2/base/node:18        node --version || echo "Failed."
+	docker run -i tgagor/v2/base/node:18 \
+		node --version || echo "Failed."
 
-	# docker build \
-	#   --tag tgagor/base/nvm-tests tests
+	docker build \
+	  --tag tgagor/base/nvm-tests tests
 
 clean:
 	docker system prune -a -f --volumes
