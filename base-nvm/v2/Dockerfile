@@ -34,5 +34,6 @@ VOLUME ~/.npm
 
 # copy the nvm
 COPY --from=fetcher --chown=jenkins:jenkins nvm $NVM_DIR
+
 # copy wrapper scripts
 COPY bin /usr/local/bin

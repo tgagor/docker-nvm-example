@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=tgagor/v1/base/nvm
+ARG BASE_IMAGE=tgagor/base/nvm
 FROM $BASE_IMAGE
 
 ARG NODE_VERSION="lts/*"
