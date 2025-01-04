@@ -17,15 +17,15 @@ build-base-v2:
 build-node: build-node-v1 build-node-v2
 build-node-v1:
 	docker build \
-		--build-arg NODE_VERSION=v18 \
+		--build-arg NODE_VERSION=20 \
 		--build-arg BASE_IMAGE=tgagor/base-v1/nvm \
-		--tag tgagor/base-v1/node:18 base-node
+		--tag tgagor/base-v1/node:20 base-node
 
 build-node-v2:
 	docker build \
-		--build-arg NODE_VERSION=18 \
+		--build-arg NODE_VERSION=20 \
 		--build-arg BASE_IMAGE=tgagor/base-v2/nvm \
-		--tag tgagor/base-v2/node:18 base-node
+		--tag tgagor/base-v2/node:20 base-node
 
 list:
 	@docker image ls \

@@ -1,0 +1,76 @@
+---
+prefix: tgagor
+maintainer: Tomasz Gągor <https://gagor.pro>
+
+labels:
+  org.opencontainers.image.licenses: GPL-3.0-only
+  org.opencontainers.image.url: https://hub.docker.com/r/tgagor/nvm
+  org.opencontainers.image.documentation: https://github.com/tgagor/docker-nvm-example/blob/master/README.md
+  org.opencontainers.image.title: Base image with NVM
+  org.opencontainers.image.description: |
+    This image provides NVM with wrappers for ease of use:
+    https://github.com/nvm-sh/nvm
+
+images:
+  base-v1:
+    options:
+      ssh: default
+    dockerfile: base-nvm/v1/Dockerfile
+    variables:
+      ubuntu:
+        - "22.04"
+        - "24.04"
+      nvm: v0.40.1
+    args:
+      UBUNTU_RELEASE: "{{ .ubuntu }}"
+      NVM_VERSION: "{{ .nvm }}"
+    tags:
+      - base-v1/nvm:{{ .nvm }}-ubuntu{{ .ubuntu }}
+      - base-v1/nvm:ubuntu{{ .ubuntu }}
+      - base-v1/nvm:latest
+    labels:
+      org.opencontainers.image.base.name: ubuntu:{{ .ubuntu }}
+
+  base-v2:
+    options:
+      ssh: default
+    dockerfile: base-nvm/v2/Dockerfile
+    variables:
+      ubuntu:
+        - "22.04"
+        - "24.04"
+      nvm: v0.40.1
+    args:
+      UBUNTU_RELEASE: "{{ .ubuntu }}"
+      NVM_VERSION: "{{ .nvm }}"
+    tags:
+      - base-v2/nvm:{{ .nvm }}-ubuntu{{ .ubuntu }}
+      - base-v2/nvm:ubuntu{{ .ubuntu }}
+      - base-v2/nvm:latest
+      - nvm:{{ .nvm }}-ubuntu{{ .ubuntu }}
+      - nvm:ubuntu{{ .ubuntu }}
+      - nvm:{{ .nvm }}
+      - nvm:latest
+    labels:
+      org.opencontainers.image.base.name: ubuntu:{{ .ubuntu }}
+
+  node:
+    dockerfile: base-node/Dockerfile
+    variables:
+      ubuntu:
+        - "22.04"
+        - "24.04"
+      node:
+        - 18
+        - 20
+        - 22
+        - 23
+    args:
+      BASE_IMAGE: "{{ .prefix }}/nvm:ubuntu{{ .ubuntu }}"
+      NODE_VERSION: "{{ .node }}"
+    tags:
+      - node:{{ .node }}-ubuntu{{ .ubuntu }}
+      - node:{{ .node }}
+      - node:latest
+    labels:
+      org.opencontainers.image.base.name: "{{ .prefix }}/nvm:ubuntu{{ .ubuntu }}"
